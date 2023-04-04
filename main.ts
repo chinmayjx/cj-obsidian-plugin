@@ -41,8 +41,8 @@ export default class MyPlugin extends Plugin {
 			.sort((a, b) => b.trigger.length - a.trigger.length)
 			.map((x) => addMarks(x));
 		this.addCommand({
-			id: "sample-editor-command",
-			name: "Sample editor command",
+			id: "completion",
+			name: "Autocomplete",
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				const e = editor.getCursor();
 				if (!e.ch) return;
@@ -90,6 +90,48 @@ export default class MyPlugin extends Plugin {
 							break;
 						}
 					}
+				}
+			},
+		});
+
+		this.addCommand({
+			id: "decrease-heading-level",
+			name: "Decrease heading levels",
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				const c = editor.getCursor();
+				const line = editor.getLine(c.line);
+				const selection = editor.getSelection();
+				if (!selection.length) {
+					const lineMod = line.replace(/^#/, "");
+					editor.replaceRange(
+						lineMod,
+						{ line: c.line, ch: 0 },
+						{ line: c.line, ch: line.length }
+					);
+				} else {
+					const selectionMod = selection.replace(/^#/gm, "");
+					editor.replaceSelection(selectionMod);
+				}
+			},
+		});
+
+		this.addCommand({
+			id: "increase-heading-level",
+			name: "Increase heading levels",
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				const c = editor.getCursor();
+				const line = editor.getLine(c.line);
+				const selection = editor.getSelection();
+				if (!selection.length) {
+					const lineMod = line.replace(/^#/, "##");
+					editor.replaceRange(
+						lineMod,
+						{ line: c.line, ch: 0 },
+						{ line: c.line, ch: line.length }
+					);
+				} else {
+					const selectionMod = selection.replace(/^#/gm, "##");
+					editor.replaceSelection(selectionMod);
 				}
 			},
 		});
