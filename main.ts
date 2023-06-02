@@ -166,7 +166,17 @@ class SampleSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 
 		containerEl.empty();
-
-		containerEl.createEl("h2", { text: "Settings for my awesome plugin." });
+		containerEl.createEl("h2", { text: "Settings" });
+		const tb = containerEl.createEl("table")
+		const r1 = tb.createEl("tr")
+		r1.createEl("td", {text: "name"})
+		r1.createEl("td", {text: "trigger"})
+		r1.createEl("td", {text: "completion"})
+		Object.entries(Snips).forEach(([k, v]) => {
+			const tr = tb.createEl("tr")
+			tr.createEl("td", {text: k})
+			tr.createEl("td", {text: v.trigger})
+			tr.createEl("td", {text: v.completion})
+		})
 	}
 }
